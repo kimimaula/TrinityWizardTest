@@ -22,13 +22,6 @@ const App: () => Node = () => {
     )
   }
 
-
-  const Test = () => {
-    return(
-      <Text>Test</Text>
-    )
-  }
-
   return (
     <SafeAreaProvider>
       <NavigationContainer>
