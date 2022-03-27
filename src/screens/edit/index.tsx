@@ -6,11 +6,10 @@ import { StyleSheet } from 'react-native';
 
 const EditPage = ({ navigation, route }) => {
     const { item } = route.params;
-    const [firstName, setFirstname] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
-    console.log('-----id', item)
+    const [firstName, setFirstname] = useState(item?.firstName)
+    const [lastName, setLastName] = useState(item?.lastName)
+    const [email, setEmail] = useState(item?.email)
+    const [phone, setPhone] = useState(item?.phone)
     return(
         <View style={styles.mainContainer} >
             <View style={{ backgroundColor: '#ff8c00', height: 100, width: 100, borderRadius: 50, marginTop: 20, marginBottom: 20 }} />
@@ -80,6 +79,7 @@ const styles = StyleSheet.create({
         borderColor: 'lightgrey',
         flex: 1,
         marginLeft: 15,
+        padding: 5
     },
     inputTextContainer: {
         height: 30,
