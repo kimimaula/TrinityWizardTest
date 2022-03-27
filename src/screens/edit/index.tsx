@@ -36,7 +36,7 @@ const EditPage = ({ navigation, route }) => {
           const updatedArray = updateArray(newData, index)
           const jsonValue = JSON.stringify(updatedArray)
           await AsyncStorage.setItem('stored-item', jsonValue)
-          navigation.navigate('Home')
+          navigation.navigate('Home', { refresh : true })
     }
 
     return(

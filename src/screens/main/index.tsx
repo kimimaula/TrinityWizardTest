@@ -5,8 +5,9 @@ import {
 import DATA from '../../../src/assets/data.json'
 import { StyleSheet, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
-const MainPage = ({ navigation }) => {
+const MainPage = ({ navigation, route }) => {
 
     const [data, setData] = useState([])
     const [reload, setReload] = useState(false)
@@ -29,20 +30,37 @@ const MainPage = ({ navigation }) => {
         }
       }
 
-    const setPageData = async () => {
-        storeData(DATA)
+    const setInitialData = async () => {
         const data = await getData()
-        console.log('------get Data', data)
+        if (!data) {
+            return
+        }
+        storeData(DATA)
+        const newData = await getData()
+        setData(newData)
+    }
+
+    const setUpdatedData = async () => {
+        const data = await getData()
         setData(data)
     }
 
     useEffect(() => {
-        setPageData()
+        setInitialData()
     }, [])
 
-    const onRefresh = () => {
+    useFocusEffect(
+        React.useCallback(() => {
+            setUpdatedData()
+        }, [])
+      );
+
+    const onRefresh = async () => {
         setReload(true)
-        setData()
+        storeData(DATA)
+        const newData = await getData()
+        setData(newData)
+        setReload(false)
     }
 
     const Avatar = () => {
@@ -71,7 +89,9 @@ const MainPage = ({ navigation }) => {
     return(
         <View style={styles.mainContainer} >
              <FlatList
+                onRefresh={() => onRefresh()}
                 data={data}
+                refreshing={reload}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
             />
