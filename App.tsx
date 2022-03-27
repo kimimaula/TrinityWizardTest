@@ -4,6 +4,8 @@ import type { Node } from 'react';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import MainPage from './src/screens/main'
+import EditPage from './src/screens/edit'
 
 
 const Stack = createNativeStackNavigator();
@@ -51,7 +53,7 @@ const App: () => Node = () => {
                 ><Text>add</Text></TouchableOpacity>
               ),
             }}
-           name="Home" component={Test} />
+           name="Home" component={MainPage} />
           <Stack.Screen
             options={{
               title: '',
@@ -62,7 +64,7 @@ const App: () => Node = () => {
                 <NavigationBtn props={props} text='Save'/>
               ),
               }}
-              name="Edit" component={Test} />
+              name="Edit" component={EditPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
