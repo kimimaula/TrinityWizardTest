@@ -1,73 +1,24 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { Node } from 'react';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import MainPage from './src/screens/main'
-import EditPage from './src/screens/edit'
+import Navigation from './src/navigation';
 
 
-const Stack = createNativeStackNavigator();
 
 const App: () => Node = () => {
 
-  const NavigationBtn = ({props, text}) => {
-    return(
-      <TouchableOpacity onPress={() => {}} >
-        <Text style={styles.btnStyle} {...props}>
-            {text}
-        </Text>
-      </TouchableOpacity>
-    )
-  }
+  
 
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home" >
-          <Stack.Screen
-            options={{
-              title: 'Contacts',
-              headerLeft: (props) => (
-                <TouchableOpacity
-                  {...props}
-                  onPress={() => {
-                    // Do something
-                  }}
-                ><Text>search</Text></TouchableOpacity>
-              ),
-              headerRight: (props) => (
-                <TouchableOpacity
-                  {...props}
-                  onPress={() => {
-                    // Do something
-                  }}
-                ><Text>add</Text></TouchableOpacity>
-              ),
-            }}
-           name="Home" component={MainPage} />
-          <Stack.Screen
-            options={{
-              title: '',
-              headerLeft: (props) => (
-                <NavigationBtn props={props} text='Cancel'/>
-              ),
-              headerRight: (props) => (
-                <NavigationBtn props={props} text='Save'/>
-              ),
-              }}
-              name="Edit" component={EditPage} />
-        </Stack.Navigator>
+        <Navigation/>
       </NavigationContainer>
     </SafeAreaProvider>
   );
 };
 
-const styles = StyleSheet.create({
-  btnStyle: {
-    color: '#ff8c00'
-  }
-});
+
 
 export default App;
