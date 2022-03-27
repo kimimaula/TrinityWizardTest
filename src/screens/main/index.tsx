@@ -10,7 +10,6 @@ const MainPage = ({ navigation }) => {
 
     const [data, setData] = useState([])
     const [reload, setReload] = useState(false)
-    const [selectedId, setSelectedId] = useState('')
 
     const storeData = async (value) => {
         try {
@@ -30,10 +29,10 @@ const MainPage = ({ navigation }) => {
         }
       }
 
-    const setPageData = () => {
+    const setPageData = async () => {
         storeData(DATA)
-        const data = getData()
-        console.log('------get Data')
+        const data = await getData()
+        console.log('------get Data', data)
         setData(data)
     }
 
@@ -52,8 +51,8 @@ const MainPage = ({ navigation }) => {
         )
     }
 
-    const Item = ({ item, onPress }) => (
-        <TouchableOpacity style={{ padding: 10 }} onPress={onPress}>
+    const Item = ({ item }) => (
+        <TouchableOpacity style={{ padding: 10 }} onPress={() => { navigation.navigate('Edit', { item }) }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomColor: 'lightgrey', borderBottomWidth: 1, paddingBottom: 5 }} >
                 <Avatar />
                 <Text >{item.firstName} {item.lastName}</Text>
@@ -65,7 +64,6 @@ const MainPage = ({ navigation }) => {
         return (
           <Item
             item={item}
-            onPress={() => setSelectedId(item.id)}
           />
         );
       };
@@ -73,13 +71,10 @@ const MainPage = ({ navigation }) => {
     return(
         <View style={styles.mainContainer} >
              <FlatList
-                data={DATA}
+                data={data}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
-                extraData={selectedId}
             />
-            <Text>test</Text>
-           
         </View>
     )
 }
