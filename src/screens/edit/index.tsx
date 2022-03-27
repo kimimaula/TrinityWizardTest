@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import {
-    ScrollView, Text, View, TouchableOpacity, TextInput
-} from 'react-native';
+import { Text, View, TouchableOpacity, TextInput } from 'react-native';
 import { StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditPage = ({ navigation, route }) => {
     const { item } = route.params;
@@ -10,6 +9,36 @@ const EditPage = ({ navigation, route }) => {
     const [lastName, setLastName] = useState(item?.lastName)
     const [email, setEmail] = useState(item?.email)
     const [phone, setPhone] = useState(item?.phone)
+
+    const handleSave = async () => {
+        const newData = {
+            firstName:firstName,
+            lastName:lastName,
+            email:email,
+            phone:phone
+        }
+        const getData = async () => {
+            try {
+                const jsonValue = await AsyncStorage.getItem('stored-item')
+                return jsonValue != null ? JSON.parse(jsonValue) : null;
+            } catch(e) {
+                console.log('----error', e)
+            }
+          }
+          const fullArray = await getData()
+          const index = fullArray.findIndex(object => {
+            return object.id === item.id;
+          });
+          const updateArray = (item, index) => {
+            fullArray[index] = item
+            return fullArray
+          }
+          const updatedArray = updateArray(newData, index)
+          const jsonValue = JSON.stringify(updatedArray)
+          await AsyncStorage.setItem('stored-item', jsonValue)
+          navigation.navigate('Home')
+    }
+
     return(
         <View style={styles.mainContainer} >
             <View style={{ backgroundColor: '#ff8c00', height: 100, width: 100, borderRadius: 50, marginTop: 20, marginBottom: 20 }} />
@@ -60,9 +89,10 @@ const EditPage = ({ navigation, route }) => {
                     keyboardType="numeric"
                 />
             </View>
-            {/* <TouchableOpacity onPress={() => { navigation.navigate('Home') }} >
-                <Text>Test</Text>
-            </TouchableOpacity> */}
+            <TouchableOpacity style={{ backgroundColor: '#ff8c00', margin: 20, height: 30, width: 100, justifyContent: 'center', alignItems: 'center' }} 
+                onPress={() => { handleSave() }} >
+                <Text>Save</Text>
+            </TouchableOpacity>
         </View>
     )
 }
